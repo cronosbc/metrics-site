@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Authorisation complete · Cronos Metrics</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<h1>Authorisation complete</h1>
+<p class="meta">This page only displays the code TikTok sent back; it stores nothing and sends nothing anywhere.</p>
+<div id="out"></div>
+<script>
+const q=new URLSearchParams(location.search), code=q.get("code")||q.get("auth_code"), err=q.get("error");
+const out=document.getElementById("out");
+if(code){
+  out.innerHTML=`<p>Copy this authorisation code now; it expires within a few minutes.</p><div class="box" id="c"></div><button id="b">Copy code</button><p class="meta">Then close this tab.</p>`;
+  document.getElementById("c").textContent=code;
+  document.getElementById("b").onclick=()=>navigator.clipboard.writeText(code).then(()=>{document.getElementById("b").textContent="Copied";});
+  history.replaceState(null,"",location.pathname);  // remove the code from the address bar and browser history
+}else if(err){ out.innerHTML=`<p>Authorisation failed: <code>${err}</code> ${q.get("error_description")||""}</p>`; }
+else{ out.innerHTML="<p>Nothing to show. This page is the redirect target for the Cronos Metrics TikTok login.</p>"; }
+</script>
+</main></body></html>
